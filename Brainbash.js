@@ -112,7 +112,7 @@ Brainbash.prototype.step = function(){
 			}
 		}
 		this["tape"+this.curSym][this["ptr"+this.curSym]] = this["tape"+this.curSym][this["ptr"+this.curSym]]||0;
-		if(this["tape"+this.curSym][this["ptr"+this.curSym]]<this.minSze) this["tape"+this.curSym][this["ptr"+this.curSym]]+=this.maxSize+1;
+		if(this["tape"+this.curSym][this["ptr"+this.curSym]]<this.minSze) this["tape"+this.curSym][this["ptr"+this.curSym]]+=this.maxSze+1;
 	} else if(this.mode==1){
 		console.log(chr);
 		if(chr==":"){this.mode = 0;this.finMac[this.code[++this.index]] = this.macros; this.macros = ""; }
