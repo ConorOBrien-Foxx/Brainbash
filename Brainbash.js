@@ -1,7 +1,7 @@
 window.addEventListener("load",function(){
 	document.getElementById("submit").addEventListener("click",function(){
 		var inp = document.getElementById("code");
-		window.bb = new Brainbash(inp.value);
+		window.bb = new Brainbash(inp.value,0,255,document.getElementById("optimize").checked);
 		bb.display();
 		document.getElementById("output").innerHTML = "";
 	});
@@ -22,16 +22,17 @@ window.addEventListener("load",function(){
 	});
 });
 
-function Brainbash(code,max,min){
+function Brainbash(code,max,min,opt){
 	this.code   = code;
+	if(opt) this.code=this.code.match(/\[\-\*\+\*\]|\[\-\]|./g);
 	this.index  = 0;
 	this.ptrA   = 0;
 	this.tapeA  = [0];
 	this.ptrB   = 0;
 	this.tapeB  = [0];
 	this.curSym = "A";
-	this.maxSze = typeof max==="undefined"?255:max;
-	this.minSze = typeof min==="undefined"?0:min;
+	this.maxSze = 255;
+	this.minSze = 0;
 	this.macros = "";
 	this.mode   = 0;
 	this.finMac = {};
@@ -46,6 +47,15 @@ Brainbash.prototype.step = function(){
 			this.index-=2;
 		} else {
 			switch(chr){
+				case "[-]":
+					this["tape"+this.curSym][this["ptr"+this.curSym]] = 0;
+					break;
+				case "[-*+*]":
+					this["tape"+"AB"[Number(this.curSym=="A")]]
+						[this["ptr"+"AB"[Number(this.curSym=="A")]]]+=
+						this["tape"+this.curSym][this["ptr"+this.curSym]];
+						this["tape"+this.curSym][this["ptr"+this.curSym]] = 0;
+					break;
 				case "+":
 					this["tape"+this.curSym][this["ptr"+this.curSym]]++;
 					break;
@@ -109,10 +119,20 @@ Brainbash.prototype.step = function(){
 				case "x":
 					this["tape"+this.curSym][this["ptr"+this.curSym]] = 0;
 					break;
+				case ",":
+					this["tape"+this.curSym][this["ptr"+this.curSym]] = prompt().charCodeAt()
+					break;
+				case ";":
+					document.getElementById("output").innerHTML += (this["tape"+this.curSym][this["ptr"+this.curSym]]);
+					break;
+				case "#":
+					this["tape"+this.curSym][this["ptr"+this.curSym]] = +prompt()%256;
+					break;
 			}
 		}
 		this["tape"+this.curSym][this["ptr"+this.curSym]] = this["tape"+this.curSym][this["ptr"+this.curSym]]||0;
 		if(this["tape"+this.curSym][this["ptr"+this.curSym]]<this.minSze) this["tape"+this.curSym][this["ptr"+this.curSym]]+=this.maxSze+1;
+		if(this["tape"+this.curSym][this["ptr"+this.curSym]]>this.maxSze) this["tape"+this.curSym][this["ptr"+this.curSym]]-=this.maxSze+1;
 	} else if(this.mode==1){
 		console.log(chr);
 		if(chr==":"){this.mode = 0;this.finMac[this.code[++this.index]] = this.macros; this.macros = ""; }
