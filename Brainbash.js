@@ -112,8 +112,8 @@ Brainbash.prototype.step = function(){
 					if(!this["tape"+this.curSym][this["ptr"+this.curSym]]){
 						var depth = 1; this.index++;
 						for(var j=this.index;++j&&depth;){
-							if(this.code[j]=="}") depth++;
-							if(this.code[j]=="{") depth--;
+							if(this.code[j]=="{") depth++;
+							if(this.code[j]=="}") depth--;
 						}
 						this.index = j;
 					}
