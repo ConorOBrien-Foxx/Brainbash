@@ -115,7 +115,7 @@ Brainbash.prototype.step = function(){
 							if(this.code[j]=="{") depth++;
 							if(this.code[j]=="}") depth--;
 						}
-						this.index = j;
+						this.index = j-1;
 					}
 					break;
 				case "*":
