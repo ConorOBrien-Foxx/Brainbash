@@ -74,14 +74,14 @@ Brainbash.prototype.step = function(){
 				case "~":
 					this.curSym = "AB"[Number(this.curSym=="A")];
 					break;
-				case "{":
+				case "(":
 					var val = this["tape"+this.curSym][this["ptr"+this.curSym]];
 					for(var i=0;i<Math.abs(val);i++){
 						this["ptr"+this.curSym]--;
 						this["tape"+this.curSym][this["ptr"+this.curSym]] = this["tape"+this.curSym][this["ptr"+this.curSym]]||0;
 					}
 					break;
-				case "}":
+				case ")":
 					var val = this["tape"+this.curSym][this["ptr"+this.curSym]];
 					for(var i=0;i<Math.abs(val);i++){
 						this["ptr"+this.curSym]++;
@@ -104,6 +104,16 @@ Brainbash.prototype.step = function(){
 						for(var j=this.index;--j&&depth;){
 							if(this.code[j]=="]") depth++;
 							if(this.code[j]=="[") depth--;
+						}
+						this.index = j;
+					}
+					break;
+				case "{":
+					if(!this["tape"+this.curSym][this["ptr"+this.curSym]]){
+						var depth = 1;
+						for(var j=this.index;++j&&depth;){
+							if(this.code[j]=="}") depth++;
+							if(this.code[j]=="{") depth--;
 						}
 						this.index = j;
 					}
