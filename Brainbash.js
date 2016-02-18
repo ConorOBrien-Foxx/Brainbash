@@ -110,7 +110,7 @@ Brainbash.prototype.step = function(){
 					break;
 				case "{":
 					if(!this["tape"+this.curSym][this["ptr"+this.curSym]]){
-						var depth = 1;
+						var depth = 1, this.index++;
 						for(var j=this.index;++j&&depth;){
 							if(this.code[j]=="}") depth++;
 							if(this.code[j]=="{") depth--;
