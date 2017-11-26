@@ -17,5 +17,7 @@ These commands might also be implemented from the original JS implementation, bu
     x       zero the current cell
     :...:Q  define a macro into symbol Q
 
+```
 ->>[<<<.>>>->+<]>[-<+>]<
 <{>+<-}<-~.+~
+```
