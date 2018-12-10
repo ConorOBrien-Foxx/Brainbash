@@ -2,6 +2,7 @@
 #define BRAINBASH_INCL
 
 #include <stdint.h>
+#include <stdbool.h>
 
 #define MAX_SIZE (30000)
 #ifndef NUM_OF_TAPES
@@ -27,12 +28,13 @@ typedef struct brainbash {
     // int* depths;
     // int depth_pointer;
     char* program;
+    bool use_color;
 } brainbash;
 
-brainbash* brainbash_init(char*, size_t);
-void brainbash_display(brainbash*);
+brainbash* brainbash_init(char*, size_t, bool);
+void brainbash_display(brainbash*, bool);
 void brainbash_run(brainbash*);
-void brainbash_debug(brainbash*);
+void brainbash_debug(brainbash*, bool);
 int brainbash_step(brainbash*);
 
 void brainbash_exec_instruction(brainbash*, char);

@@ -3,7 +3,7 @@
 
 #include "brainbash.h"
 
-brainbash* brainbash_init(char* program, size_t size) {
+brainbash* brainbash_init(char* program, size_t size, bool use_color) {
     brainbash* res = malloc(sizeof(brainbash));
     
     if(res == NULL)
@@ -13,6 +13,7 @@ brainbash* brainbash_init(char* program, size_t size) {
     res->size = size;
     res->focus = 0;
     res->index = 0;
+    res->use_color = use_color;
     
     // size_t depth_size = 1;
     // for(size_t p = 0; p < size; p++) {
@@ -71,17 +72,22 @@ void cls(void) {
     printf("\x1b[2J");
 }
 
-void tape_display(tape* t) {
+void tape_display(tape* t, bool use_color) {
     for(int j = 0; j <= t->farthest; j++) {
-        printf(" %s%-*lli\x1b[0m ", j == t->ptr ? "\x1b[33m>" : " ", 4, tape_get_at(t, j));
+        if(use_color) {
+            printf(" %s%-*lli\x1b[0m ", j == t->ptr ? "\x1b[33m>" : " ", 4, tape_get_at(t, j));
+        }
+        else {
+            printf(" %s%-*lli ", j == t->ptr ? ">" : " ", 4, tape_get_at(t, j));
+        }
     }
 }
 
-void brainbash_display(brainbash* inst) {
+void brainbash_display(brainbash* inst, bool use_color) {
     for(int i = 0; i < NUM_OF_TAPES; i++) {
         tape* cur = inst->tapes[i];
         printf("[%c] ", i == inst->focus ? '*' : ' ');
-        tape_display(cur);
+        tape_display(cur, use_color);
         puts("");
     }
 }
@@ -153,7 +159,7 @@ void brainbash_run(brainbash* inst) {
     while(brainbash_step(inst));
 }
 
-void brainbash_debug(brainbash* inst) {
+void brainbash_debug(brainbash* inst, bool color) {
     // int k = 0;
     while(1) {
         // printf("%i", k);
@@ -163,7 +169,7 @@ void brainbash_debug(brainbash* inst) {
             cls();
             puts(inst->program);
             printf("%*c\n", 1 + (int)inst->index, '^');
-            brainbash_display(inst);
+            brainbash_display(inst, color);
             // scanf("%d",&k);
             getchar();
         // }
@@ -211,7 +217,7 @@ void brainbash_exec_instruction(brainbash* inst, char instruction) {
             break;
         // debug
         case '`':
-            brainbash_display(inst);
+            brainbash_display(inst, inst->use_color);
             break;
         // input number
         case '#':
