@@ -159,7 +159,7 @@ void brainbash_run(brainbash* inst) {
     while(brainbash_step(inst));
 }
 
-void brainbash_debug(brainbash* inst, bool color) {
+void brainbash_debug(brainbash* inst, bool use_color) {
     // int k = 0;
     while(1) {
         // printf("%i", k);
@@ -169,7 +169,7 @@ void brainbash_debug(brainbash* inst, bool color) {
             cls();
             puts(inst->program);
             printf("%*c\n", 1 + (int)inst->index, '^');
-            brainbash_display(inst, color);
+            brainbash_display(inst, use_color);
             // scanf("%d",&k);
             getchar();
         // }

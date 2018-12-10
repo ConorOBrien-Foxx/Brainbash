@@ -12,7 +12,7 @@ int main(int argc, char** argv) {
         return 1;
     }
     
-    bool use_color;
+    bool use_color = false;
     char* file_name = NULL;
     
     for(int i = 1; i < argc; i++) {
